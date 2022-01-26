@@ -16,6 +16,8 @@ const newsSchema = new Schema({
   },
 });
 
+// converting the schema to a model
 const newsModel = mongoose.model("News", newsSchema);
 
+// to make the mmodel accessible to other files
 module.exports = newsModel;
