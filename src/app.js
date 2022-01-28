@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const newsRouter = require("./routes/news.route");
+const userRouter = require("./routes/user.route");
 
 const app = express();
 
@@ -30,6 +31,8 @@ app.get("/", function (req, res) {
 });
 
 app.use("/api/v1", newsRouter);
+
+app.use("/api/v1", userRouter);
 
 app.listen(PORT, () => {
   console.log(`App is listening on PORT ${PORT}`);
