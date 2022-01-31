@@ -1,5 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
 const newsRouter = require("./routes/news.route");
 const userRouter = require("./routes/user.route");
 
@@ -7,17 +9,14 @@ const app = express();
 
 app.use(express.json());
 
-const PORT = 2022;
+const port = process.env.PORT;
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(
-      "mongodb+srv://Abby:12345@cluster0.vw2fm.mongodb.net/CNN?retryWrites=true&w=majority",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
-    );
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("Database is connected");
   } catch (error) {
     console.log(`Database Not Connected`);
@@ -34,7 +33,7 @@ app.use("/api/v1", newsRouter);
 
 app.use("/api/v1", userRouter);
 
-app.listen(PORT, () => {
-  console.log(`App is listening on PORT ${PORT}`);
+app.listen(port, () => {
+  console.log(`App is listening on PORT ${port}`);
 });
 // app.listen(3000);
