@@ -1,5 +1,10 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const CNN_TOKEN = process.env.CNN_TOKEN;
+
+// const {CNN_TOKEN} = process.env;
 
 exports.createAnAccount = async (req, res, next) => {
   try {
@@ -23,6 +28,7 @@ exports.createAnAccount = async (req, res, next) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
+    // console.log(token);
     const newUsers = new User({
       firstName,
       lastName,
@@ -32,13 +38,22 @@ exports.createAnAccount = async (req, res, next) => {
       role,
     });
 
+    const payload = {
+      id: newUsers._id,
+      email: newUsers.email,
+      role: newUsers.role,
+    };
+
+    const token = await jwt.sign(payload, CNN_TOKEN, { expiresIn: "1h" });
+
     await newUsers.save();
     return res.status(201).json({
       success: true,
       newUsers,
+      token,
     });
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: "error caught",
