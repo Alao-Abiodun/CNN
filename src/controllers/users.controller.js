@@ -1,6 +1,8 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const CNN_TOKEN = process.env.CNN_TOKEN;
 
@@ -79,9 +81,17 @@ exports.login = async (req, res, next) => {
         message: "Password Not Correct",
       });
     }
+    const data = {
+      id: emailExist._id,
+      email: emailExist.email,
+      role: emailExist.role,
+    };
+
+    const token = await jwt.sign(data, CNN_TOKEN, { expiresIn: "1h" });
     return res.status(200).json({
       success: true,
       message: "User login successfully",
+      token,
     });
     // console.log(emailExist);
   } catch (error) {

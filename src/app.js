@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const newsRouter = require("./routes/news.route");
 const userRouter = require("./routes/user.route");
+const productRouter = require("./routes/product.route");
 
 const app = express();
 
@@ -32,6 +33,8 @@ app.get("/", function (req, res) {
 app.use("/api/v1", newsRouter);
 
 app.use("/api/v1", userRouter);
+
+app.use("/api/v1", productRouter);
 
 app.listen(port, () => {
   console.log(`App is listening on PORT ${port}`);
